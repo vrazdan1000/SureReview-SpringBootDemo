@@ -1,0 +1,593 @@
+/* ==========================================================================
+   1. DESIGN TOKENS  — change colours and table height here only
+   ========================================================================== */
+:root {
+  /* brand palette */
+  --blue:   #81A6C6;
+  --sky:    #AACDDC;
+  --cream:  #F3E3D0;
+  --sand:   #D2C4B4;
+
+  /* neutrals */
+  --ink:    #26343D;
+  --muted:  #5C6C77;
+  --white:  #FFFDFA;
+
+  /* status tints */
+  --green:  #BBD9C4;
+  --rose:   #E5C0B8;
+
+  /* geometry */
+  --radius: 0;
+  --shadow: 0 2px 10px rgba(38, 52, 61, .12);
+  --rows:   8;      /* rows visible before the table body scrolls */
+
+  /* typography */
+  --font: "Public Sans", -apple-system, BlinkMacSystemFont, "SF Pro Text",
+          "Segoe UI", system-ui, sans-serif;
+}
+
+
+
+/* ==========================================================================
+   2. BASE / RESET
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font);
+  background: linear-gradient(180deg, #f7efe7 0%, var(--cream) 100%);
+  color: var(--ink);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius);
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* shared buttons */
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+  padding: 11px 20px;
+  font-weight: 600;
+  transition: background .18s, transform .18s;
+}
+
+.btn-primary:hover {
+  background: #6D93B5;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: var(--sand);
+  color: var(--ink);
+  padding: 11px 20px;
+  font-weight: 600;
+}
+
+.btn-ghost:hover {
+  background: #C4B4A2;
+}
+
+.btn-sm {
+  padding: 9px 16px;
+}
+
+/* shared form field */
+.field {
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--sand);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--blue);
+  outline: none;
+}
+
+
+/* ==========================================================================
+   3. LOGIN SCREEN
+   ========================================================================== */
+#login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(140deg, var(--sky) 0%, var(--cream) 55%, var(--sand) 100%);
+}
+
+.card {
+  width: 100%;
+  max-width: 380px;
+  padding: 36px 32px;
+  background: rgba(255, 253, 250, 0.96);
+  border-radius: 0;
+  border-top: 6px solid var(--blue);
+  box-shadow: 0 16px 40px rgba(38, 52, 61, 0.16);
+  backdrop-filter: blur(8px);
+}
+
+.card h1 {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -.2px;
+}
+
+.card p {
+  margin: 6px 0 24px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+#loginBtn {
+  width: 100%;
+  margin-top: 8px;
+}
+
+
+/* ==========================================================================
+   4. NAVIGATION BAR
+   ========================================================================== */
+#app {
+  display: none;           /* revealed by app.js after login */
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px 5%;
+  background: linear-gradient(90deg, var(--blue) 0%, #8eaec8 100%);
+  box-shadow: 0 8px 24px rgba(38, 52, 61, 0.14);
+  border-bottom: 1px solid rgba(38, 52, 61, 0.08);
+}
+
+/* dark ink on the blue bar for a strong, readable title */
+.brand {
+  margin-right: auto;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -.3px;
+  color: var(--ink);
+}
+
+.searchbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.searchbar select,
+.searchbar input {
+  min-width: 150px;
+  padding: 9px 12px;
+  border: 1px solid rgba(38, 52, 61, 0.1);
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: inset 0 1px 2px rgba(38, 52, 61, 0.04);
+}
+
+.searchbar button {
+  padding: 9px 18px;
+  font-weight: 600;
+  background: var(--cream);
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(38, 52, 61, 0.08);
+}
+
+.searchbar button:hover {
+  background: var(--sand);
+}
+
+
+/* ==========================================================================
+   5. TABLE
+   ========================================================================== */
+main {
+  width: 92%;
+  margin: 28px auto 48px;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.table-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  background: rgba(255, 253, 250, 0.85);
+  border: 1px solid rgba(38, 52, 61, 0.08);
+  border-radius: 0;
+  box-shadow: 0 4px 14px rgba(38, 52, 61, 0.06);
+}
+
+.table-filters label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+  color: var(--ink);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.table-filters select {
+  padding: 8px 10px;
+  border: 1px solid var(--sand);
+  border-radius: 6px;
+  background: var(--white);
+}
+
+.bar h2 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.count {
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--sky);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.table-wrap {
+  background: var(--white);
+  border-radius: 0;
+  box-shadow: 0 10px 30px rgba(38, 52, 61, 0.1);
+  overflow: hidden;
+  border: 1px solid rgba(38, 52, 61, 0.06);
+}
+
+.scroll {
+  max-height: calc(var(--rows) * 53px + 46px);
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  border: 1px solid #000;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  padding: 14px 16px;
+  background: linear-gradient(180deg, var(--sky) 0%, #b7d0e0 100%);
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: 1px solid #000;
+}
+
+tbody td {
+  padding: 12px 16px;
+  border: 1px solid #000;
+}
+
+tbody tr {
+  transition: background .15s;
+}
+
+tbody tr:hover {
+  background: linear-gradient(90deg, rgba(170, 205, 220, 0.18) 0%, rgba(243, 227, 208, 0.28) 100%);
+}
+
+.empty {
+  padding: 34px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* status pill — class name comes from the status value */
+.tag {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--sand);
+}
+
+.tag.Approved { background: var(--green); }
+.tag.Pending  { background: var(--cream); }
+.tag.Rejected { background: var(--rose); }
+.tag.Review   { background: var(--sky); }
+
+.edit {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--blue);
+  color: #fff;
+}
+
+.edit:hover {
+  background: #6D93B5;
+}
+
+.delete {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--rose);
+  color: var(--ink);
+}
+
+.delete:hover {
+  background: #D9AAA0;
+}
+
+
+/* ==========================================================================
+   6. FOOTER — ADD BUTTON + PAGINATION
+   ========================================================================== */
+.table-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.range {
+  margin-right: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.page-btn {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 9px;
+  background: var(--white);
+  color: var(--ink);
+  border: 1px solid var(--sand);
+  font-size: 14px;
+  font-weight: 600;
+  transition: background .15s, transform .15s;
+}
+
+.page-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.page-btn:hover:not(:disabled) {
+  background: var(--sky);
+}
+
+.page-btn.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+.page-btn:disabled {
+  opacity: .4;
+  cursor: default;
+}
+
+
+/* ==========================================================================
+   7. MODAL
+   ========================================================================== */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(38, 52, 61, .45);
+}
+
+.overlay.open {
+  display: flex;
+  animation: fade .18s ease;
+}
+
+.modal {
+  width: 100%;
+  max-width: 460px;
+  max-height: 92vh;
+  overflow: auto;
+  background: var(--white);
+  border-radius: 0;
+  box-shadow: 0 16px 44px rgba(38, 52, 61, .26);
+  animation: rise .2s ease;
+}
+
+.modal header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 22px;
+  background: var(--sky);
+  border-radius: 0;
+}
+
+.modal header h3 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.close {
+  background: none;
+  color: var(--ink);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.modal .body {
+  padding: 22px;
+}
+
+.modal footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0 22px 22px;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* read-only Case ID while editing */
+#mCase[readonly] {
+  background: var(--cream);
+  color: var(--muted);
+}
+
+.error {
+  display: none;
+  margin-top: -4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #A4503F;
+}
+
+.error.show {
+  display: block;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+
+/* ==========================================================================
+   8. RESPONSIVE / ACCESSIBILITY
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .brand      { width: 100%; }
+  .searchbar  { width: 100%; }
+  .searchbar input { flex: 1; }
+  .row2       { grid-template-columns: 1fr; }
+  .pager      { margin-left: 0; }
+  .table-footer { gap: 10px; }
+}
+
+.nav-left{
+    display:flex;
+    flex-direction:column;
+    margin-right:auto;
+}
+
+.login-info{
+    font-size:11px;
+    color:#b30000;
+    font-weight:600;
+    margin-top:2px;
+}
+
+.logout-btn{
+    background:#b30000;
+    color:#fff;
+    padding:9px 18px;
+    font-weight:600;
+}
+
+.logout-btn:hover{
+    background:#8d0000;
+}
+
+/* ==========================================================================
+   9. SERVER CONNECTION BANNER
+   ========================================================================== */
+.banner {
+    display: none;
+    padding: 10px 5%;
+    background: #b30000;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.banner.show {
+    display: block;
+}
+
+.btn-primary:disabled {
+    opacity: .6;
+    cursor: default;
+    transform: none;
+}

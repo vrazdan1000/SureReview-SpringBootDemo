@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document Reviewer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- 1. LOGIN SCREEN -->
+  <section id="login">
+    <div class="card">
+
+      <h1>Document Reviewer</h1>
+      <p>Sign in to review submitted case documents.</p>
+
+      <div class="field">
+        <label for="user">User ID</label>
+        <input id="user" value="reviewer01" autocomplete="username">
+      </div>
+
+      <div class="field">
+        <label for="pass">Password</label>
+        <input id="pass" type="password" value="12345" autocomplete="current-password"
+               onkeydown="if (event.key === 'Enter') login()">
+      </div>
+
+      <button id="loginBtn" class="btn-primary" onclick="login()">Log in</button>
+
+    </div>
+  </section>
+
+
+  <!-- 2. APPLICATION SHELL  (hidden until login) -->
+  <div id="app">
+
+    <!-- Navigation bar -->
+    <nav>
+    <div class="nav-left">
+        <span class="brand">Document Reviewer</span>
+        <span id="loginInfo" class="login-info"></span>
+    </div>
+
+    <div class="searchbar">
+        <select id="searchField">
+            <option value="all">All fields</option>
+            <option value="caseId">Case ID</option>
+            <option value="name">Applicant name</option>
+            <option value="docType">Document type</option>
+            <option value="date">Date</option>
+            <option value="status">Status</option>
+            <option value="remarks">Remarks</option>
+        </select>
+
+        <input id="searchText" placeholder="Search records">
+
+        <button onclick="search()">Search</button>
+        <button class="btn-ghost btn-sm" onclick="clearSearch()">Clear</button>
+
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</nav>
+
+
+    <!-- Shown only when the server cannot be reached -->
+    <div id="banner" class="banner"></div>
+
+    <!-- 2b. Main content -->
+    <main>
+
+      <div class="bar">
+        <h2>Case records</h2>
+        <span class="count" id="count">0 records</span>
+      </div>
+      <div class="table-filters">
+
+    <label>
+        Document Type:
+        <select id="typeFilter" onchange="applyFilter()">
+            <option value="all">All</option>
+            <option>PDF</option>
+            <option>JPEG</option>
+            <option>EXCEL</option>
+        </select>
+    </label>
+
+    <label>
+        Status:
+        <select id="statusFilter" onchange="applyFilter()">
+            <option value="all">All</option>
+            <option>Pending</option>
+            <option>Review</option>
+            <option>Approved</option>
+            <option>Rejected</option>
+        </select>
+    </label>
+
+</div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Case ID</th>
+                <th>Applicant Name</th>
+                <th>Doc Type</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Remarks</th>
+                <th>Action</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+
+            <!-- rows are written here by render() in app.js -->
+            <tbody id="tbody"></tbody>
+
+          </table>
+        </div>
+      </div>
+
+      <!-- Add button + pagination, directly below the table -->
+      <div class="table-footer">
+
+        <button class="btn-primary" onclick="addRecord()">+ Add record</button>
+
+        <div class="pager">
+          <span class="range" id="range"></span>
+
+          <button class="page-btn" id="prevBtn" aria-label="Previous page"
+                  onclick="prevPage()">&lsaquo;</button>
+
+          <!-- page number buttons are written here by renderPager() -->
+          <span id="pageNums"></span>
+
+          <button class="page-btn" id="nextBtn" aria-label="Next page"
+                  onclick="nextPage()">&rsaquo;</button>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+
+  <!-- 3. ADD / EDIT MODAL  (one dialog serves both actions) -->
+  <div class="overlay" id="overlay" onclick="backdropClick(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+
+      <header>
+        <h3 id="mTitle">Edit record</h3>
+        <button class="close" aria-label="Close" onclick="closeModal()">&times;</button>
+      </header>
+
+      <div class="body">
+
+        <div class="field">
+          <label for="mCase">Case ID</label>
+          <input id="mCase" inputmode="numeric">
+        </div>
+
+        <div class="field">
+          <label for="mName">Applicant Name</label>
+          <input id="mName">
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="mType">Doc Type</label>
+            <select id="mType">
+              <option>PDF</option>
+              <option>JPEG</option>
+              <option>EXCEL</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="mDate">Date</label>
+            <input id="mDate" type="date">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="mStatus">Status</label>
+          <select id="mStatus">
+            <option>Pending</option>
+            <option>Review</option>
+            <option>Approved</option>
+            <option>Rejected</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="mRemarks">Remarks</label>
+          <input id="mRemarks" placeholder="One or two words">
+        </div>
+
+        <p class="error" id="mError"></p>
+
+      </div>
+
+      <footer>
+        <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" id="saveBtn" onclick="saveRecord()">Save changes</button>
+      </footer>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
